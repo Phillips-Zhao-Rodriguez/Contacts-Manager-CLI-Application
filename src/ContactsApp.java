@@ -10,7 +10,6 @@ public class ContactsApp {
     public static List<String> contactString = Collections.singletonList("");
     public static Path path = Paths.get("./src/contacts.txt").normalize();
 
-
     public static void contactApp() {
 
         try {
@@ -23,24 +22,23 @@ public class ContactsApp {
         for (String line : contactString) {
             String[] contactInfo = line.split(" \\+ ");
             Contact contact = new Contact(contactInfo[0], Long.parseLong(contactInfo[1]));
-            System.out.println(contact.getContactName() + " " + contact.getContactNumber());
             contacts.add(contact);
         }
 
-        try {
-            Files.write(path, contactString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Files.write(path, contactString);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
-    public static void printContacts () {
+    public static void printContacts() {
         for (Contact line : contacts) {
             System.out.println(line.getContactName() + " : " + line.getContactNumber());
         }
     }
 
-    public static void addContact () {
+    public static void addContact() {
         Path path = Paths.get("./src/contacts.txt").normalize();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the name");
@@ -51,63 +49,80 @@ public class ContactsApp {
         System.out.println(newContact.toString());
         contacts.add(newContact);
     }
-   public static void searchContact(){
+
+    public static void searchContact() {
         Scanner scanner = new Scanner(System.in);
-       System.out.println("Search by name enter:1");
-       System.out.println("Search by number enter:2");
-       System.out.println("exit by number :3");
-       int input = scanner.nextInt();
-       boolean agree = true;
-       do{
-           if(input == 1){
-               String inputName = scanner.nextLine();
-               for(Contact line: contacts){
-                   if(line.getContactName().equals(inputName)){
-                       System.out.println(line);
-                   } else {
-                       System.out.println("We can't find the person you are looking for");
-                   }
-                   break;
-               }
-           }else if( input == 2) {
-               int inputNumber = scanner.nextInt();
-               for (Contact line : contacts) {
-                   if (line.getContactNumber() == inputNumber) {
-                       System.out.println(line);
-                   } else{
-                       System.out.println("We can't find the number you are looking for");
-                   }
-                   break;
-               }
-           } else if (input == 3){
-               agree = false;
+//        System.out.println("Search by name enter:1");
+//        System.out.println("Search by number enter:2");
+//        System.out.println("exit by number :3");
+//        String input = scanner.nextLine();
+//       int input = scanner.nextInt();
+        boolean agree = true;
+        do {
+            System.out.println("Search by name enter:1");
+            System.out.println("Search by number enter:2");
+            System.out.println("exit by number :3");
+            String input = scanner.nextLine();
+            if (input.equals("1")) {
+                System.out.println("please enter the name: ");
+                String inputName = scanner.nextLine();
+                System.out.println(inputName);
+                boolean found = false;
+                for (Contact line : contacts) {
+//                    System.out.println(line);
+                    if (line.getContactName().equals(inputName)) {
+                        System.out.println(line);
+                        found = true;
+                        break;
+                    }
 
-           } else{
-               System.out.println("Please enter the valid number");
-           }
+                }
+                if(!found){
+                    System.out.println("We can't find the person you are looking for");
+                }
+            } else if (input.equals("2")) {
+                System.out.println("enter the number:");
+                long inputNumber = scanner.nextLong();
+                for (Contact line : contacts) {
+                    if (line.getContactNumber() == inputNumber) {
+                        System.out.println(line);
+                    } else {
+                        System.out.println("We can't find the number you are looking for");
+                    }
+                }
+            } else if (input.equals("3")) {
+                agree = false;
 
-       }while(agree);
+            } else {
+                System.out.println("Please enter the valid number");
+            }
+
+        } while (agree);
 
 
-   }
-    public static void deleteContact(){
+    }
+
+    public static void deleteContact() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Search by name enter:1");
         System.out.println("Search by number enter:2");
         System.out.println("exit by number :3");
-        int input = scanner.nextInt();
+//        int input = scanner.nextInt();
+        String inputInt = scanner.nextLine();
+        int input = Integer.parseInt(inputInt);
         boolean agree = true;
-        do{
-            if(input == 1){
+        do {
+            if (input == 1) {
+                System.out.println("enter the name");
                 String inputName = scanner.nextLine();
-                for(Contact line: contacts){
-                    if(line.getContactName().equalsIgnoreCase(inputName)){
+                for (Contact line : contacts) {
+                    if (line.getContactName().equalsIgnoreCase(inputName)) {
                         System.out.println(line);
                         System.out.println("Are you sure you want to delete it? Y or N");
                         String deleteName = scanner.nextLine();
                         if (deleteName.equalsIgnoreCase("Y")) {
                             contacts.remove(line);
-                        } else if (deleteName.equalsIgnoreCase("N")){
+                        } else if (deleteName.equalsIgnoreCase("N")) {
                             break;
                         }
                     } else {
@@ -115,7 +130,8 @@ public class ContactsApp {
                     }
                     break;
                 }
-            }else if( input == 2) {
+            } else if (input == 2) {
+                System.out.println("enter the number");
                 int inputNumber = scanner.nextInt();
                 for (Contact line : contacts) {
                     if (line.getContactNumber() == inputNumber) {
@@ -127,23 +143,22 @@ public class ContactsApp {
 
                             break;
 
-                        } else if (deleteName.equalsIgnoreCase("N")){
+                        } else if (deleteName.equalsIgnoreCase("N")) {
                             break;
                         }
 
-                    } else{
+                    } else {
                         System.out.println("We can't find the number you are looking for");
                     }
                     break;
                 }
-            } else if (input == 3){
+            } else if (input == 3) {
                 agree = false;
 
-            } else{
+            } else {
                 System.out.println("Please enter the valid number");
             }
-            break;
-        }while(agree);
+        } while (agree);
 
 
     }
@@ -151,9 +166,8 @@ public class ContactsApp {
     public static void main(String[] args) {
         boolean agree = true;
         contactApp();
-        addContact();
-        printContacts();
-        do{
+
+        do {
             System.out.println("1. View Contacts.");
             System.out.println("2. Add a New Contact.");
             System.out.println("3. Search a Contact by Name");
@@ -162,9 +176,9 @@ public class ContactsApp {
             System.out.println("Enter an option (1, 2, 3, 4 or 5):");
             Scanner scanner = new Scanner(System.in);
             int input = scanner.nextInt();
-            switch(input){
+            switch (input) {
                 case 1:
-                    contactApp();
+                    printContacts();
                     break;
                 case 2:
                     addContact();
@@ -180,20 +194,20 @@ public class ContactsApp {
                 default:
                     System.out.println("Invalid option");
             }
-            System.out.println("Continue?Y or N");
-            String input1= scanner.nextLine();
-            if(input1.equalsIgnoreCase("Y")){
-                continue;
-            } else if (input1.equalsIgnoreCase("N")){
-                agree = false;
-            } else{
-                System.out.println("Invalid option");
-            }
 
-        }while(agree);
+//            System.out.println("Continue?Y or N");
+//            String input1= scanner.nextLine();
+//            if(input1.equalsIgnoreCase("Y")){
+//                continue;
+//            } else if (input1.equalsIgnoreCase("N")){
+//                agree = false;
+//            } else{
+//                System.out.println("Invalid option");
+//            }
+
+        } while (agree);
 
     }
-
 
 
 }
