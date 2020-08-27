@@ -28,7 +28,12 @@ public class Contact {
         this.contactNumber = contactNumber;
     }
 
-//    public static List<String> contactsToNameStrings (List<Contact> contacts) {
+    @Override
+    public String toString() {
+        return contactName + " " + contactNumber;
+    }
+
+    //    public static List<String> contactsToNameStrings (List<Contact> contacts) {
 //        List<String> contactString = new ArrayList<>();
 //        for (Contact contact : contacts) {
 //            contactString.add(contact.getContactName());
