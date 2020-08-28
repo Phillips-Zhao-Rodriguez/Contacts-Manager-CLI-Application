@@ -1,3 +1,4 @@
+import javax.print.attribute.standard.PrinterURI;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -65,7 +66,7 @@ public abstract class ContactsApp {
             long newContactNumber = scanner.nextLong();
             if (String.valueOf(newContactNumber).length() == 10 || String.valueOf(newContactNumber).length() == 7) {
                 Contact newContact = new Contact(newContactName, newContactNumber);
-                System.out.println(newContact.toString());
+                System.out.printf("%sDo you want to add %s%s to the contacts? Y / N", PURPLE,newContact.toString(),RESET);
                 contacts.add(newContact);
             } else {
                 System.out.println("Please enter 7 or 10 digit number:");
