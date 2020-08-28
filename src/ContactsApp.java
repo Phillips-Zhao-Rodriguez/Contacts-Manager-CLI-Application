@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.io.FileWriter;
 
 public abstract class ContactsApp {
     public static final String RESET = "\u001B[0m";
@@ -18,7 +19,7 @@ public abstract class ContactsApp {
     public static List<Contact> contacts = new ArrayList<>();
     public static List<String> contactString = Collections.singletonList("");
     public static Path path = Paths.get("./src/contacts.txt").normalize();
-
+    public static List<String> outPut = new ArrayList<>();
 
     public static void contactApp() {
 
@@ -42,6 +43,18 @@ public abstract class ContactsApp {
 //        }
     }
 
+    public static void output() {
+        for (Contact contact : contacts) {
+            outPut.add(String.format("%s + %s", contact.getContactName(), contact.getContactNumber()));
+        }
+        try {
+            Files.write(path, outPut, StandardOpenOption.TRUNCATE_EXISTING);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void printContacts() {
         System.out.printf("%s-------------------------------------------\n", RED);
         System.out.printf("%s%-18s %s| %s%-11s \n", GREEN, "Name", RESET, GREEN, "Phone Number");
@@ -63,11 +76,17 @@ public abstract class ContactsApp {
         String newContactName = scanner.nextLine();
         System.out.println("Enter the number");
         try {
-            long newContactNumber = scanner.nextLong();
+            String newContactNumber1 = scanner.nextLine();
+            long newContactNumber = Long.parseLong(newContactNumber1);
             if (String.valueOf(newContactNumber).length() == 10 || String.valueOf(newContactNumber).length() == 7) {
-                Contact newContact = new Contact(newContactName, newContactNumber);
-                System.out.printf("%sDo you want to add %s%s to the contacts? Y / N", PURPLE,newContact.toString(),RESET);
-                contacts.add(newContact);
+                System.out.printf("%sDo you want to add %s with %d to the contacts? Y / N%s", PURPLE, newContactName, newContactNumber, RESET);
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("Y")) {
+                    Contact newContact = new Contact(newContactName, newContactNumber);
+                    contacts.add(newContact);
+                } else if (input.equalsIgnoreCase("N")) {
+                    System.out.println("Cancel adding the contact");
+                }
             } else {
                 System.out.println("Please enter 7 or 10 digit number:");
                 addContact();
@@ -122,19 +141,19 @@ public abstract class ContactsApp {
                     System.out.println("enter the name");
                     String inputName = scanner.nextLine();
                     for (Contact line : contacts) {
-                        if (line.getContactName().equalsIgnoreCase(inputName)) {
+                        if (line.getContactName().toLowerCase().contains(inputName.toLowerCase())) {
                             System.out.println(line);
                             System.out.println("Are you sure you want to delete it? Y or N");
                             String deleteName = scanner.nextLine();
                             if (deleteName.equalsIgnoreCase("Y")) {
                                 contacts.remove(line);
+                                agree = false;
+                                break;
                             } else if (deleteName.equalsIgnoreCase("N")) {
                                 break;
                             }
-                        } else {
-                            System.out.println("We can't find the person you are looking for");
                         }
-                        break;
+
                     }
                 } else if (input == 2) {
                     System.out.println("enter the number");
@@ -146,18 +165,17 @@ public abstract class ContactsApp {
                             String deleteName = scanner.nextLine();
                             if (deleteName.equalsIgnoreCase("Y")) {
                                 contacts.remove(line);
-
+                                agree = false;
                                 break;
 
                             } else if (deleteName.equalsIgnoreCase("N")) {
                                 break;
                             }
 
-                        } else {
-                            System.out.println("We can't find the number you are looking for");
                         }
-                        break;
+
                     }
+
                 } else if (input == 3) {
                     agree = false;
 
@@ -165,7 +183,9 @@ public abstract class ContactsApp {
                     System.out.println("Please enter the valid number");
                     break;
                 }
+
             } while (agree);
+           if(agree){ System.out.println("We can't find the number you are looking for");}
         } catch (Exception e) {
             System.out.printf("%s%s%s%s\n", "Please enter a ", GREEN, "Number", RESET);
             deleteContact();
@@ -206,8 +226,9 @@ public abstract class ContactsApp {
                 default:
                     System.out.println("Invalid option");
             }
-        } while (agree);
 
+        } while (agree);
+        output();
     }
 
 
