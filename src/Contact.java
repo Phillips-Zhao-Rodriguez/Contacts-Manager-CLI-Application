@@ -1,8 +1,3 @@
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Contact {
     private String contactName;
     private long contactNumber;
@@ -32,15 +27,4 @@ public class Contact {
     public String toString() {
         return contactName + " " + contactNumber;
     }
-
-    //    public static List<String> contactsToNameStrings (List<Contact> contacts) {
-//        List<String> contactString = new ArrayList<>();
-//        for (Contact contact : contacts) {
-//            contactString.add(contact.getContactName());
-//        }
-//        return contactString;
-//    }
-
-
-
 }
