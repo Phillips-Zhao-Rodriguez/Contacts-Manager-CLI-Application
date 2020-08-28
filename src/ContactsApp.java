@@ -2,13 +2,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-public class ContactsApp {
-
+public abstract class ContactsApp {
     public static List<Contact> contacts = new ArrayList<>();
     public static List<String> contactString = Collections.singletonList("");
     public static Path path = Paths.get("./src/contacts.txt").normalize();
+
+
 
     public static void contactApp() {
 
@@ -33,30 +35,35 @@ public class ContactsApp {
     }
 
     public static void printContacts() {
+        System.out.println("-------------------------------------------");
+        System.out.printf("%-18s | %-11s \n","Name","Phone Number");
+        System.out.println("-------------------------------------------");
         for (Contact line : contacts) {
-            System.out.println(line.getContactName() + " : " + line.getContactNumber());
+            System.out.printf("%-18s | %-11s \n", line.getContactName() ,  phoneNumberFormat(line.getContactNumber()));
         }
+        System.out.println("-------------------------------------------");
     }
-
+    public static String phoneNumberFormat(Long n){
+        return n/10000000 + "-" + n%10000000/10000 + "-" + n%10000000%10000;
+    }
     public static void addContact() {
-        Path path = Paths.get("./src/contacts.txt").normalize();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the name");
         String newContactName = scanner.nextLine();
         System.out.println("Enter the number");
         long newContactNumber = scanner.nextLong();
-        Contact newContact = new Contact(newContactName, newContactNumber);
-        System.out.println(newContact.toString());
-        contacts.add(newContact);
+        if(String.valueOf(newContactNumber).length()!= 10){
+            System.out.println("Please enter 10 digit number:");
+            addContact();
+        } else {
+            Contact newContact = new Contact(newContactName, newContactNumber);
+            System.out.println(newContact.toString());
+            contacts.add(newContact);
+        }
     }
 
     public static void searchContact() {
         Scanner scanner = new Scanner(System.in);
-//        System.out.println("Search by name enter:1");
-//        System.out.println("Search by number enter:2");
-//        System.out.println("exit by number :3");
-//        String input = scanner.nextLine();
-//       int input = scanner.nextInt();
         boolean agree = true;
         do {
             System.out.println("Search by name enter:1");
@@ -191,20 +198,11 @@ public class ContactsApp {
                     break;
                 case 5:
                     agree = false;
+                    System.out.println("Exit");
+                    break;
                 default:
                     System.out.println("Invalid option");
             }
-
-//            System.out.println("Continue?Y or N");
-//            String input1= scanner.nextLine();
-//            if(input1.equalsIgnoreCase("Y")){
-//                continue;
-//            } else if (input1.equalsIgnoreCase("N")){
-//                agree = false;
-//            } else{
-//                System.out.println("Invalid option");
-//            }
-
         } while (agree);
 
     }
