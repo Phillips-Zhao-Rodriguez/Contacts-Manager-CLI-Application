@@ -31,7 +31,7 @@ public abstract class ContactsApp {
         }
 
         for (String line : contactString) {
-            String[] contactInfo = line.split(" \\+ ");
+            String[] contactInfo = line.split(" \\+ ");//
             Contact contact = new Contact(contactInfo[0], Long.parseLong(contactInfo[1]));
             contacts.add(contact);
         }
